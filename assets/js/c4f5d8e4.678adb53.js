@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_open_fabric_developer_docs=self.webpackChunk_open_fabric_developer_docs||[]).push([[2634],{30192(e,r,c){c.r(r),c.d(r,{default:()=>_});var o=c(56347),s=c(86025),d=c(74848);function _(){return(0,d.jsx)(o.rd,{to:(0,s.Ay)("/docs/Overview")})}}}]);
