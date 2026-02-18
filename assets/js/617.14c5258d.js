@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_open_fabric_developer_docs=self.webpackChunk_open_fabric_developer_docs||[]).push([[617],{50617(e,c,r){r.d(c,{createPieServices:()=>s.f});var s=r(69150);r(87960)}}]);

@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_open_fabric_developer_docs=self.webpackChunk_open_fabric_developer_docs||[]).push([[6366],{86366(e,c,r){r.d(c,{createArchitectureServices:()=>s.S});var s=r(38980);r(87960)}}]);
