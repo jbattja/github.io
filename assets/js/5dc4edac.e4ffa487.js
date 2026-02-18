@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_open_fabric_developer_docs=self.webpackChunk_open_fabric_developer_docs||[]).push([[210],{77611(e){e.exports=JSON.parse('{"name":"docusaurus-plugin-redoc","id":"apis"}')}}]);
