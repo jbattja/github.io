@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_open_fabric_developer_docs=self.webpackChunk_open_fabric_developer_docs||[]).push([[957],{40936(e){e.exports=JSON.parse('{"name":"docusaurus-theme-search-algolia","id":"default"}')}}]);
