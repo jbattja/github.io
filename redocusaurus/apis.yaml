@@ -64,8 +64,16 @@ tags:
 
 
       See [Authorization
-      message](/docs/ProcessingPayments/AuthorizationAndClearing/AuthorizationMessages)
-      for more details.
+      message](/docs/ProcessingPayments/AuthorizationMessages) for more details.
+  - name: Ledger Operations
+    description: >
+      Ledger operations that Open Fabric calls on your backend to apply balance
+      changes (debit/credit/hold/release).
+
+
+      See [Approval and Ledger
+      APIs](/docs/ProcessingPayments/AuthorizationAndLedgerAPIs) for more
+      details.
   - name: Reversal Notifications
     description: >
       Notifications related to reversals. These are messages sent from our
@@ -73,8 +81,23 @@ tags:
 
 
       See [Reversal
-      notifications](/docs/ProcessingPayments/AuthorizationAndClearing/ReversalNotifications)
-      for more details.
+      notifications](/docs/ProcessingPayments/ReversalNotifications) for more
+      details.
+  - name: Clearing
+    description: >
+      Messages related to clearing. These are messages sent from our platform to
+      your backend via notifications and reporting.
+
+
+      See [Clearing operations](/docs/ProcessingPayments/Clearing) for more
+      details.
+  - name: Settlement
+    description: >
+      Messages related to settlement. These are messages sent from our platform
+      to your backend via notifications and reporting.
+
+
+      See [Settlement](/docs/ProcessingPayments/Settlement) for more details.
   - name: 'Schema: Tenant Online Transaction Orchestration'
   - name: 'Schema: Tenant Online Transaction Notification'
   - name: 'Schema: Tenant Pre-approved Transaction Link Notification'
@@ -2056,8 +2079,8 @@ paths:
 
 
         See [Authorization
-        message](/docs/ProcessingPayments/AuthorizationAndClearing/AuthorizationMessages)
-        for more details.
+        message](/docs/ProcessingPayments/AuthorizationMessages) for more
+        details.
       servers:
         - url: https://{your_webhook_host}
           description: Your backend endpoint (not Open Fabric).
@@ -2079,6 +2102,173 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PbaAskForApprovalOutboundResponse'
+  /as-configured-by-you/ledger/debit-balance:
+    post:
+      operationId: debitBalance
+      summary: Debit balance
+      description: |
+        `debit_balance`: Deduct funds from a customer’s balance for settlement.
+      servers:
+        - url: https://{your_webhook_host}
+          description: Your backend endpoint (not Open Fabric).
+          variables:
+            your_webhook_host:
+              default: api.your-company.com
+      tags:
+        - Ledger Operations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DebitBalanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DebitBalanceResponse'
+  /as-configured-by-you/ledger/credit-balance:
+    post:
+      operationId: creditBalance
+      summary: Credit balance
+      description: >
+        `credit_balance`: Add funds to a customer’s balance (for refunds or
+        adjustments).
+      servers:
+        - url: https://{your_webhook_host}
+          description: Your backend endpoint (not Open Fabric).
+          variables:
+            your_webhook_host:
+              default: api.your-company.com
+      tags:
+        - Ledger Operations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditBalanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditBalanceResponse'
+  /as-configured-by-you/ledger/hold-balance:
+    post:
+      operationId: holdBalance
+      summary: Hold balance
+      description: >
+        `hold_balance`: Place a hold on funds in a customer’s balance
+        (pre-authorization).
+      servers:
+        - url: https://{your_webhook_host}
+          description: Your backend endpoint (not Open Fabric).
+          variables:
+            your_webhook_host:
+              default: api.your-company.com
+      tags:
+        - Ledger Operations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HoldBalanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HoldBalanceResponse'
+  /as-configured-by-you/ledger/restore-balance:
+    post:
+      operationId: restoreBalance
+      summary: Restore balance
+      description: >
+        `restore_balance`: Release previously held funds back to available
+        balance.
+      servers:
+        - url: https://{your_webhook_host}
+          description: Your backend endpoint (not Open Fabric).
+          variables:
+            your_webhook_host:
+              default: api.your-company.com
+      tags:
+        - Ledger Operations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreBalanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestoreBalanceResponse'
+  /as-configured-by-you/ledger/debit-hold-balance:
+    post:
+      operationId: debitHoldBalance
+      summary: Debit hold balance
+      description: >
+        `debit_hold_balance`: Deduct an amount from previously held funds
+        (created with `hold_balance`).
+      servers:
+        - url: https://{your_webhook_host}
+          description: Your backend endpoint (not Open Fabric).
+          variables:
+            your_webhook_host:
+              default: api.your-company.com
+      tags:
+        - Ledger Operations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DebitHoldBalanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DebitHoldBalanceResponse'
+  /as-configured-by-you/ledger/credit-hold-balance:
+    post:
+      operationId: creditHoldBalance
+      summary: Credit hold balance
+      description: >
+        `credit_hold_balance`: Add an amount to previously held funds (created
+        with `hold_balance`).
+      servers:
+        - url: https://{your_webhook_host}
+          description: Your backend endpoint (not Open Fabric).
+          variables:
+            your_webhook_host:
+              default: api.your-company.com
+      tags:
+        - Ledger Operations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditHoldBalanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditHoldBalanceResponse'
   /as-configured-by-you/final-auth-reversal:
     post:
       operationId: finalAuthReversalNotification
@@ -2089,7 +2279,7 @@ paths:
 
 
         See [Reversal
-        notifications](/docs/ProcessingPayments/AuthorizationAndClearing/ReversalNotifications#final-authorization-reversal)
+        notifications](/docs/ProcessingPayments/ReversalNotifications#final-authorization-reversal)
         for more details.
       servers:
         - url: https://{your_webhook_host}
@@ -2118,7 +2308,7 @@ paths:
 
 
         See [Reversal
-        notifications](/docs/ProcessingPayments/AuthorizationAndClearing/ReversalNotifications#pre-authorization-reversal)
+        notifications](/docs/ProcessingPayments/ReversalNotifications#pre-authorization-reversal)
         for more details.
       servers:
         - url: https://{your_webhook_host}
@@ -2148,7 +2338,7 @@ paths:
 
 
         See [Reversal
-        notifications](/docs/ProcessingPayments/AuthorizationAndClearing/ReversalNotifications#authorization-failed-notification)
+        notifications](/docs/ProcessingPayments/ReversalNotifications#authorization-failed-notification)
         for more details.
       servers:
         - url: https://{your_webhook_host}
@@ -2164,6 +2354,52 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PbaAuthorizationFailedNotificationEnvelope'
+      responses:
+        '200':
+          description: OK
+  /as-configured-by-you/clearing-file-ready:
+    post:
+      operationId: clearingFileReadyNotification
+      summary: Clearing file ready notification
+      description: |
+        Notification sent when a clearing file is ready to be processed.
+      servers:
+        - url: https://{your_webhook_host}
+          description: Your backend endpoint (not Open Fabric).
+          variables:
+            your_webhook_host:
+              default: api.your-company.com
+      tags:
+        - Clearing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PbaClearingFileReadyNotificationEnvelope'
+      responses:
+        '200':
+          description: OK
+  /as-configured-by-you/settlement-file-ready:
+    post:
+      operationId: settlementFileReadyNotification
+      summary: Settlement file ready notification
+      description: |
+        Notification sent when a settlement file is ready to be processed.
+      servers:
+        - url: https://{your_webhook_host}
+          description: Your backend endpoint (not Open Fabric).
+          variables:
+            your_webhook_host:
+              default: api.your-company.com
+      tags:
+        - Settlement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PbaSettlementFileReadyNotificationEnvelope'
       responses:
         '200':
           description: OK
@@ -2694,8 +2930,11 @@ x-tagGroups:
   - name: Payment Processing
     tags:
       - Authorization
+      - Ledger Operations
       - Reversal Notifications
       - 3D Secure
+      - Clearing
+      - Settlement
   - name: Online Orchestration
     tags:
       - 'Tenant: Transaction Orchestration'
@@ -2711,6 +2950,42 @@ x-tagGroups:
       - 'Schema: Partner Online Transaction Notification'
 components:
   schemas:
+    DebitBalanceRequest:
+      allOf:
+        - $ref: '#/components/schemas/schemas-DebitBalanceRequest'
+    DebitBalanceResponse:
+      allOf:
+        - $ref: '#/components/schemas/schemas-DebitBalanceResponse'
+    CreditBalanceRequest:
+      allOf:
+        - $ref: '#/components/schemas/schemas-CreditBalanceRequest'
+    CreditBalanceResponse:
+      allOf:
+        - $ref: '#/components/schemas/schemas-CreditBalanceResponse'
+    HoldBalanceRequest:
+      allOf:
+        - $ref: '#/components/schemas/schemas-HoldBalanceRequest'
+    HoldBalanceResponse:
+      allOf:
+        - $ref: '#/components/schemas/schemas-HoldBalanceResponse'
+    RestoreBalanceRequest:
+      allOf:
+        - $ref: '#/components/schemas/schemas-RestoreBalanceRequest'
+    RestoreBalanceResponse:
+      allOf:
+        - $ref: '#/components/schemas/schemas-RestoreBalanceResponse'
+    DebitHoldBalanceRequest:
+      allOf:
+        - $ref: '#/components/schemas/schemas-DebitHoldBalanceRequest'
+    DebitHoldBalanceResponse:
+      allOf:
+        - $ref: '#/components/schemas/schemas-DebitHoldBalanceResponse'
+    CreditHoldBalanceRequest:
+      allOf:
+        - $ref: '#/components/schemas/schemas-CreditHoldBalanceRequest'
+    CreditHoldBalanceResponse:
+      allOf:
+        - $ref: '#/components/schemas/schemas-CreditHoldBalanceResponse'
     PbaFinalAuthReversalNotificationEnvelope:
       type: object
       required:
@@ -2789,6 +3064,60 @@ components:
           transaction_status: declined
           reason: 'Tenant Service Error: no response from tenant, undefined'
           advised_action: reverse_transaction
+    PbaClearingFileReadyNotificationEnvelope:
+      type: object
+      required:
+        - notification_id
+        - type
+        - created_at
+        - data
+      properties:
+        notification_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - v1:pba:eoc:clearing_file_ready
+        created_at:
+          type: string
+          format: date-time
+        data:
+          $ref: '#/components/schemas/EOCFileProcessedNotification'
+    ClearingRecord:
+      title: Clearing record
+      description: JSON schema for one record in a clearing file.
+      allOf:
+        - $ref: '#/components/schemas/schemas-ClearingRecord'
+      x-tags:
+        - Clearing
+    PbaSettlementFileReadyNotificationEnvelope:
+      type: object
+      required:
+        - notification_id
+        - type
+        - created_at
+        - data
+      properties:
+        notification_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - v1:pba:eos:net_settlement_file_ready
+        created_at:
+          type: string
+          format: date-time
+        data:
+          $ref: '#/components/schemas/EOSNetSettlementNotification'
+    SettlementRecord:
+      title: Settlement Report
+      description: JSON schema for one record in a settlement report.
+      allOf:
+        - $ref: '#/components/schemas/SettlementRecords'
+      x-tags:
+        - Settlement
     WalletTokenActivatedNotificationEnvelope:
       type: object
       required:
@@ -3966,8 +4295,6 @@ components:
       required:
         - notification_id
         - transaction_id
-        - network_transaction_timestamp
-        - network_original_transaction_timestamp
         - tenant_reference_id
         - network_transaction_ref
         - network_message_ref
@@ -3984,16 +4311,6 @@ components:
         transaction_id:
           type: string
           format: uuid
-        network_transaction_timestamp:
-          type: string
-          format: date-time
-          description: Timestamp of the reversal transaction from the network
-        network_original_transaction_timestamp:
-          type: string
-          format: date-time
-          description: >-
-            Timestamp of the original transaction being reversed from the
-            network
         tenant_reference_id:
           type: string
         network_transaction_ref:
@@ -4038,8 +4355,6 @@ components:
         - notification_id
         - transaction_id
         - tenant_reference_id
-        - network_transaction_timestamp
-        - network_original_transaction_timestamp
         - network_transaction_ref
         - network_message_ref
         - amount
@@ -4054,16 +4369,6 @@ components:
         transaction_id:
           type: string
           format: uuid
-        network_transaction_timestamp:
-          type: string
-          format: date-time
-          description: Timestamp of the reversal transaction from the network
-        network_original_transaction_timestamp:
-          type: string
-          format: date-time
-          description: >-
-            Timestamp of the original transaction being reversed from the
-            network
         tenant_reference_id:
           type: string
         network_transaction_ref:
@@ -4164,7 +4469,7 @@ components:
       required:
         - notification_id
         - transaction_id
-        - network_transaction_timestamp
+        - network_message_timestamp
         - network_transaction_ref
         - network_message_ref
         - transaction_type
@@ -4186,10 +4491,10 @@ components:
           type: string
           format: uuid
           description: Transaction identifier (used for idempotency)
-        network_transaction_timestamp:
+        network_message_timestamp:
           type: string
           format: date-time
-          description: Timestamp of the authorization transaction from the network
+          description: Timestamp of the authorization message from the network
         transaction_type:
           $ref: '#/components/schemas/PbaAuthTypeFlagValues'
         tenant_reference_id:
@@ -6255,6 +6560,313 @@ components:
           description: List of rule violations (empty if decision is proceed)
           items:
             $ref: '#/components/schemas/AuthPolicyViolation'
+    BalanceAmount:
+      type: object
+      description: Amount object used in balance operations
+      required:
+        - value
+        - currency
+      properties:
+        value:
+          type: number
+          description: The amount value in minor units (e.g., cents)
+        currency:
+          type: string
+          minLength: 3
+          maxLength: 3
+          description: ISO 4217 Alpha-3 currency code
+    schemas-DebitBalanceRequest:
+      type: object
+      description: Request for debiting from a customer's balance
+      required:
+        - transaction_id
+        - tenant_account_ref
+        - idempotency_key
+        - of_action_ref
+      properties:
+        transaction_id:
+          type: string
+          description: Unique identifier for the transaction
+        tenant_account_ref:
+          type: string
+          description: Identifier of the tenant account
+        idempotency_key:
+          type: string
+          description: Unique identifier to prevent duplicate operations
+        amount:
+          $ref: '#/components/schemas/BalanceAmount'
+        of_action_ref:
+          type: string
+          description: OpenFabric reference identifier for the operation
+        tenant_balance_ref:
+          type: string
+          description: >-
+            Reference of the exact balance to be debited (used in refund
+            reversal)
+    BalanceOperationError:
+      type: object
+      description: Error details returned on balance operation failure
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Error code (e.g., INSUFFICIENT_FUNDS, ACCOUNT_NOT_FOUND)
+        message:
+          type: string
+          description: Human-readable error message
+    schemas-DebitBalanceResponse:
+      type: object
+      description: Response for debit_balance operation
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the debit operation was successful
+        tenant_balance_ref:
+          type: string
+          description: Reference of the balance record that was debited
+        available_balance:
+          $ref: '#/components/schemas/BalanceAmount'
+        tenant_action_ref:
+          type: string
+          description: Tenant's internal reference for this operation
+        error:
+          $ref: '#/components/schemas/BalanceOperationError'
+    schemas-CreditBalanceRequest:
+      type: object
+      description: Request for crediting to a customer's balance
+      required:
+        - transaction_id
+        - tenant_account_ref
+        - idempotency_key
+        - of_action_ref
+      properties:
+        transaction_id:
+          type: string
+          description: Unique identifier for the transaction
+        tenant_account_ref:
+          type: string
+          description: Identifier of the tenant account
+        idempotency_key:
+          type: string
+          description: Unique identifier to prevent duplicate operations
+        amount:
+          $ref: '#/components/schemas/BalanceAmount'
+        of_action_ref:
+          type: string
+          description: OpenFabric reference identifier for the operation
+        tenant_balance_ref:
+          type: string
+          description: >-
+            Reference of the exact balance to be credited (used in auth
+            reversal)
+    schemas-CreditBalanceResponse:
+      type: object
+      description: Response for credit_balance operation
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the credit operation was successful
+        tenant_balance_ref:
+          type: string
+          description: Reference of the balance record that was credited
+        available_balance:
+          $ref: '#/components/schemas/BalanceAmount'
+        tenant_action_ref:
+          type: string
+          description: Tenant's internal reference for this operation
+        error:
+          $ref: '#/components/schemas/BalanceOperationError'
+    schemas-HoldBalanceRequest:
+      type: object
+      description: Request for placing a hold on funds (pre-authorization)
+      required:
+        - transaction_id
+        - tenant_account_ref
+        - idempotency_key
+        - of_action_ref
+      properties:
+        transaction_id:
+          type: string
+          description: Unique identifier for the transaction
+        tenant_account_ref:
+          type: string
+          description: Identifier of the tenant account
+        idempotency_key:
+          type: string
+          description: Unique identifier to prevent duplicate operations
+        amount:
+          $ref: '#/components/schemas/BalanceAmount'
+        of_action_ref:
+          type: string
+          description: OpenFabric reference identifier for the operation
+        tenant_hold_balance_ref:
+          type: string
+          description: >-
+            Reference of the hold funds balance to be increased (used in
+            pre-auth incremental)
+    schemas-HoldBalanceResponse:
+      type: object
+      description: Response for hold_balance operation
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the hold operation was successful
+        tenant_hold_balance_ref:
+          type: string
+          description: Reference of the hold funds balance
+        available_balance:
+          $ref: '#/components/schemas/BalanceAmount'
+        tenant_action_ref:
+          type: string
+          description: Tenant's internal reference for this operation
+        error:
+          $ref: '#/components/schemas/BalanceOperationError'
+    schemas-RestoreBalanceRequest:
+      type: object
+      description: Request for releasing previously held funds
+      required:
+        - transaction_id
+        - tenant_account_ref
+        - idempotency_key
+        - of_action_ref
+        - tenant_hold_balance_ref
+      properties:
+        transaction_id:
+          type: string
+          description: Unique identifier for the transaction
+        tenant_account_ref:
+          type: string
+          description: Identifier of the tenant account
+        idempotency_key:
+          type: string
+          description: Unique identifier to prevent duplicate operations
+        amount:
+          $ref: '#/components/schemas/BalanceAmount'
+        of_action_ref:
+          type: string
+          description: OpenFabric reference identifier for the operation
+        tenant_hold_balance_ref:
+          type: string
+          description: Reference of the hold funds balance to be released (required)
+    schemas-RestoreBalanceResponse:
+      type: object
+      description: Response for restore_balance operation
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the restore operation was successful
+        tenant_balance_ref:
+          type: string
+          description: Reference of the balance that hold funds were restored to
+        available_balance:
+          $ref: '#/components/schemas/BalanceAmount'
+        tenant_action_ref:
+          type: string
+          description: Tenant's internal reference for this operation
+        error:
+          $ref: '#/components/schemas/BalanceOperationError'
+    schemas-DebitHoldBalanceRequest:
+      type: object
+      description: Request for debiting from a hold balance
+      required:
+        - transaction_id
+        - tenant_account_ref
+        - idempotency_key
+        - of_action_ref
+        - tenant_hold_balance_ref
+      properties:
+        transaction_id:
+          type: string
+          description: Unique identifier for the transaction
+        tenant_account_ref:
+          type: string
+          description: Identifier of the tenant account
+        idempotency_key:
+          type: string
+          description: Unique identifier to prevent duplicate operations
+        amount:
+          $ref: '#/components/schemas/BalanceAmount'
+        of_action_ref:
+          type: string
+          description: OpenFabric reference identifier for the operation
+        tenant_hold_balance_ref:
+          type: string
+          description: Reference of the hold funds balance to be debited (required)
+    schemas-DebitHoldBalanceResponse:
+      type: object
+      description: Response for debit_hold_balance operation
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the debit hold operation was successful
+        tenant_hold_balance_ref:
+          type: string
+          description: Reference of the hold balance that was debited
+        hold_balance:
+          $ref: '#/components/schemas/BalanceAmount'
+        tenant_action_ref:
+          type: string
+          description: Tenant's internal reference for this operation
+        error:
+          $ref: '#/components/schemas/BalanceOperationError'
+    schemas-CreditHoldBalanceRequest:
+      type: object
+      description: Request for crediting to a hold balance
+      required:
+        - transaction_id
+        - tenant_account_ref
+        - idempotency_key
+        - of_action_ref
+        - tenant_hold_balance_ref
+      properties:
+        transaction_id:
+          type: string
+          description: Unique identifier for the transaction
+        tenant_account_ref:
+          type: string
+          description: Identifier of the tenant account
+        idempotency_key:
+          type: string
+          description: Unique identifier to prevent duplicate operations
+        amount:
+          $ref: '#/components/schemas/BalanceAmount'
+        of_action_ref:
+          type: string
+          description: OpenFabric reference identifier for the operation
+        tenant_hold_balance_ref:
+          type: string
+          description: Reference of the hold funds balance to be credited (required)
+    schemas-CreditHoldBalanceResponse:
+      type: object
+      description: Response for credit_hold_balance operation
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the credit hold operation was successful
+        tenant_hold_balance_ref:
+          type: string
+          description: Reference of the hold balance that was credited
+        hold_balance:
+          $ref: '#/components/schemas/BalanceAmount'
+        tenant_action_ref:
+          type: string
+          description: Tenant's internal reference for this operation
+        error:
+          $ref: '#/components/schemas/BalanceOperationError'
     PbaAuthTypeFlagValues:
       type: string
       enum:
@@ -6687,6 +7299,372 @@ components:
         creation_time:
           type: string
           format: date-time
+    PbaClearingType:
+      type: string
+      enum:
+        - final_auth
+        - final_auth_reversal
+        - final_auth_partial
+        - final_auth_partial_reversal
+        - pre_auth_partial
+        - pre_auth_partial_reversal
+        - pre_auth_final
+        - pre_auth_final_reversal
+        - final_auth_expiry
+        - pre_auth_expiry
+        - refund
+        - refund_reversal
+        - refund_expiry
+        - chargeback_challenge
+        - chargeback_challenge_reversal
+        - chargeback
+        - chargeback_reversal
+        - fee_collection_credit
+        - fee_collection_credit_reversal
+        - fee_collection_debit
+        - fee_collection_debit_reversal
+        - unlinked_auth_partial
+        - unlinked_auth_final
+        - unlinked_auth_partial_reversal
+        - unlinked_auth_final_reversal
+        - unlinked_refund
+        - unlinked_refund_reversal
+        - unlinked_chargeback
+    PbaTransferType:
+      type: string
+      enum:
+        - consumer_debit
+        - consumer_credit
+        - ahi_debit
+        - ahi_credit
+    schemas-ClearingRecord:
+      type: object
+      required:
+        - network_clearing_ref
+        - type
+        - transfer_type
+        - is_potential_chargeback
+        - network_merchant_name
+        - network_merchant_outlet_address
+        - network_merchant_id
+        - amount
+        - currency
+        - billing_amount
+        - billing_currency_code
+        - billing_exchange_rate
+        - settlement_amount
+        - settlement_currency_code
+        - settlement_exchange_rate
+        - interchange_fee_amount
+        - interchange_fee_currency_code
+        - network_clearing_file_ref
+        - network_clearing_file_name
+        - network_clearing_timestamp
+        - transaction_source
+        - network_posting_file_id
+        - network_acquirer_id
+        - is_converted_pre_auth
+      properties:
+        network_clearing_ref:
+          type: string
+        type:
+          $ref: '#/components/schemas/PbaClearingType'
+        transfer_type:
+          $ref: '#/components/schemas/PbaTransferType'
+        is_potential_chargeback:
+          type: boolean
+        original_transaction_id:
+          type: string
+        transaction_id:
+          type: string
+          description: >-
+            Transaction ID of this transaction itself. Used for action mapping
+            workflow dispatch.
+        network_transaction_ref:
+          type: string
+        network_acquirer_transaction_ref:
+          type: string
+        original_tenant_transaction_ref:
+          type: string
+        customer_id:
+          type: string
+        tenant_account_ref:
+          type: string
+        tenant_customer_ref:
+          type: string
+        network_merchant_name:
+          type: string
+        network_merchant_outlet_address:
+          type: string
+        network_merchant_id:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+        billing_amount:
+          type: number
+        billing_currency_code:
+          type: string
+        billing_exchange_rate:
+          type: number
+        settlement_amount:
+          type: number
+        settlement_currency_code:
+          type: string
+        settlement_exchange_rate:
+          type: number
+        interchange_fee_amount:
+          type: number
+        interchange_fee_currency_code:
+          type: string
+        network_clearing_file_ref:
+          type: string
+        network_clearing_file_name:
+          type: string
+        network_clearing_timestamp:
+          type: string
+        transaction_source:
+          $ref: '#/components/schemas/PbaTransactionSource'
+        network_posting_file_id:
+          description: >-
+            Mastercard's identifier of the GCMS file in which the transaction
+            appeared
+          type: string
+        network_merchant_category_code:
+          description: Type of services or goods the Merchant provides for the transaction
+          type: string
+        network_acquirer_id:
+          description: Acquirer identification of the transaction
+          type: string
+        network_merchant_country_code:
+          description: Country Code - ISO 3166 Alpha-2
+          type: string
+        is_converted_pre_auth:
+          type: boolean
+          description: Indicates if this is a converted pre-authorization transaction
+        network_merchant_terminal_id:
+          type: string
+          description: ID of the Merchant Terminal
+        network_merchant_city:
+          type: string
+          description: City of the Merchant Terminal
+    ReconciliationAndNetSettlementSummary:
+      type: object
+      required:
+        - network_settlement_file_ref
+        - network_settlement_file_name
+        - network_reconciliation_date
+        - network_reconciliation_timestamp
+        - interbank_settlement_date
+        - transfer_currency_code
+        - transfer_amount
+        - transfer_type
+        - transfer_payment_message_ref
+        - transfer_end_to_end_ref
+        - transfer_requested_exec_date
+        - settlement_currency_code
+        - total_net_recon_amount
+        - total_credit_txn_amount
+        - total_credit_number_of_txn
+        - total_credit_chargeback_amount
+        - total_credit_number_of_chargeback
+        - total_credit_reversal_amount
+        - total_credit_number_of_reversal
+        - total_credit_interchange_fee_amount
+        - total_debit_txn_amount
+        - total_debit_number_of_txn
+        - total_debit_chargeback_amount
+        - total_debit_number_of_chargeback
+        - total_debit_reversal_amount
+        - total_debit_number_of_reversal
+        - total_debit_interchange_fee_amount
+        - network_settlement_timestamp
+      properties:
+        network_settlement_file_ref:
+          type: string
+        network_settlement_file_name:
+          type: string
+        network_reconciliation_date:
+          type: string
+        network_reconciliation_timestamp:
+          type: string
+        interbank_settlement_date:
+          type: string
+        transfer_currency_code:
+          type: string
+        transfer_amount:
+          type: number
+        transfer_type:
+          $ref: '#/components/schemas/PbaTransferType'
+        transfer_payment_message_ref:
+          type: string
+        transfer_end_to_end_ref:
+          type: string
+        transfer_requested_exec_date:
+          type: string
+        settlement_currency_code:
+          type: string
+        total_net_recon_amount:
+          type: number
+        total_credit_txn_amount:
+          type: number
+        total_credit_number_of_txn:
+          type: number
+        total_credit_chargeback_amount:
+          type: number
+        total_credit_number_of_chargeback:
+          type: number
+        total_credit_reversal_amount:
+          type: number
+        total_credit_number_of_reversal:
+          type: number
+        total_credit_interchange_fee_amount:
+          type: number
+        total_debit_txn_amount:
+          type: number
+        total_debit_number_of_txn:
+          type: number
+        total_debit_chargeback_amount:
+          type: number
+        total_debit_number_of_chargeback:
+          type: number
+        total_debit_reversal_amount:
+          type: number
+        total_debit_number_of_reversal:
+          type: number
+        total_debit_interchange_fee_amount:
+          type: number
+        total_number_of_auth:
+          type: number
+        total_number_of_auth_reversal:
+          type: number
+        network_settlement_timestamp:
+          type: string
+    SettlementRecordDetail:
+      type: object
+      required:
+        - network_settlement_ref
+        - type
+        - transfer_type
+        - is_potential_chargeback
+        - network_merchant_name
+        - network_merchant_outlet_address
+        - network_merchant_id
+        - network_settlement_file_ref
+        - network_settlement_file_name
+        - amount
+        - currency
+        - billing_amount
+        - billing_currency_code
+        - billing_exchange_rate
+        - settlement_amount
+        - settlement_currency_code
+        - settlement_exchange_rate
+        - interchange_fee_amount
+        - interchange_fee_currency_code
+        - network_settlement_timestamp
+        - transaction_source
+        - network_posting_file_id
+        - network_acquirer_id
+        - is_converted_pre_auth
+      properties:
+        network_settlement_ref:
+          type: string
+        type:
+          $ref: '#/components/schemas/PbaClearingType'
+        transfer_type:
+          $ref: '#/components/schemas/PbaTransferType'
+        is_potential_chargeback:
+          type: boolean
+        network_settlement_file_ref:
+          type: string
+        network_settlement_file_name:
+          type: string
+        original_transaction_id:
+          type: string
+        transaction_id:
+          type: string
+          description: >-
+            Transaction ID of this transaction itself. Used for action mapping
+            workflow dispatch.
+        network_transaction_ref:
+          type: string
+        network_acquirer_transaction_ref:
+          type: string
+        original_tenant_transaction_ref:
+          type: string
+        customer_id:
+          type: string
+        tenant_customer_ref:
+          type: string
+        tenant_account_ref:
+          type: string
+        network_merchant_name:
+          type: string
+        network_merchant_outlet_address:
+          type: string
+        network_merchant_id:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+        billing_amount:
+          type: number
+        billing_currency_code:
+          type: string
+        billing_exchange_rate:
+          type: number
+        settlement_amount:
+          type: number
+        settlement_currency_code:
+          type: string
+        settlement_exchange_rate:
+          type: number
+        interchange_fee_amount:
+          type: number
+        interchange_fee_currency_code:
+          type: string
+        network_settlement_timestamp:
+          type: string
+        transaction_source:
+          $ref: '#/components/schemas/PbaTransactionSource'
+        network_posting_file_id:
+          description: >-
+            Mastercard's identifier of the GCMS file in which the transaction
+            appeared
+          type: string
+        network_merchant_category_code:
+          description: Type of services or goods the Merchant provides for the transaction
+          type: string
+        network_acquirer_id:
+          description: Acquirer identification of the transaction
+          type: string
+        network_merchant_country_code:
+          description: Country Code - ISO 3166 Alpha-2
+          type: string
+        is_converted_pre_auth:
+          type: boolean
+          description: Indicates if this is a converted pre-authorization transaction
+        network_merchant_terminal_id:
+          type: string
+          description: ID of the Merchant Terminal
+        network_merchant_city:
+          type: string
+          description: City of the Merchant Terminal
+    SettlementRecords:
+      type: object
+      required:
+        - reconciliationAndNetSettlementSummary
+        - settlementRecordDetails
+      properties:
+        reconciliationAndNetSettlementSummary:
+          $ref: '#/components/schemas/ReconciliationAndNetSettlementSummary'
+        settlementRecordDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/SettlementRecordDetail'
     AccountTransactionIntegrationRequest:
       type: object
       required:
